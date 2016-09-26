@@ -87,3 +87,30 @@ static uint32_t jenkins(char *key, size_t len)
     hash += (hash << 15);
     return hash;
 }
+
+static void clearList(entry *list);
+/**
+ * @brief Free the allocated memory for the hash table.
+ * @param pHashTable The pointer to the hash table
+ * @param numOfIndex The number of the indexes in the hash table
+ */
+void clearTable(entry **pHashTable, int numOfIndex)
+{
+    for (int i = 0; i < numOfIndex; ++i) {
+        clearList(pHashTable[i]);
+        pHashTable[i] = NULL;
+    }
+}
+
+/**
+ * @brief Free all the element in the linked list _list_.
+ */
+static void clearList(entry *list)
+{
+    entry *next;
+    while (list != NULL) {
+        next = list->pNext;
+        free(list);
+        list = next;
+    }
+}
