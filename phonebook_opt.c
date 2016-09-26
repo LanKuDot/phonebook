@@ -7,15 +7,38 @@
 #define HASH_MODULO(x) ((x) & 0xFFF)
 static uint32_t jenkins(char *key, size_t len);
 
-/* FILL YOUR OWN IMPLEMENTATION HERE! */
-entry *findName(char lastname[], entry *pHead)
+static entry *findEntry(const char value[], entry * const pHead);
+/**
+ * @brief Find the entry containing the specified last name
+ * in the hash table
+ * @param lastName The last name to search
+ * @param pHashTable The pointer to the hash table
+ * @return The pointer to the matched entry
+ * @retval NULL There is no entry matched
+ */
+entry *findName(char lastName[], entry **pHashTable)
 {
-    /* TODO: implement */
-    return NULL;
+    uint32_t hashValue = HASH_MODULO(jenkins(lastName, strlen(lastName)));
+    return findEntry(lastName, pHashTable[hashValue]);
 }
 
-entry *append(char lastName[], entry *e)
+/**
+ * @brief Find the entry containing the specified value in the
+ * linked list.
+ * @param value The value to search
+ * @param pHead The head of the linked list
+ * @return The pointer to the matched entry
+ * @retval NULL There is no entry matched
+ */
+static entry *findEntry(const char value[], entry * const pHead)
 {
+    entry *current = pHead;
+    while (current != NULL) {
+        if (strcasecmp(current->lastName, value) == 0)
+            return current;
+        current = current->pNext;
+    }
+
     return NULL;
 }
 
