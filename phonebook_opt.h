@@ -27,5 +27,6 @@ typedef struct __PHONE_BOOK_ENTRY {
 entry *findName(char lastName[], entry **pHashTable);
 entry *append(char lastName[], entry **pHashTable);
 void clearTable(entry **pHashTable, int numOfIndex);
+void getListLen(entry **pHashTable, int *pResult);
 
 #endif

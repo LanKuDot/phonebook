@@ -114,3 +114,33 @@ static void clearList(entry *list)
         list = next;
     }
 }
+
+static int countListLen(entry *pHead);
+/**
+ * @brief Count the length of the linked list in each index of hashTable
+ * @param pHashTable The pointer to the hash table
+ * @param pResult [out] The pointer to the array of integer to
+ *        store the result. Must have enough length.
+ */
+void getListLen(entry **pHashTable, int *pResult)
+{
+    for (int i = 0; i < HASH_TABLE_SIZE; ++i) {
+        pResult[i] = countListLen(pHashTable[i]);
+    }
+}
+
+/**
+ * @brief Count the length of the specified linked list
+ * @param pHead The pointer to the head of the linked list
+ * @return The length of the linked list
+ */
+static int countListLen(entry *pHead)
+{
+    int count = 0;
+    entry *current = pHead;
+    while (current != NULL) {
+        ++count;
+        current = current->pNext;
+    }
+    return count;
+}

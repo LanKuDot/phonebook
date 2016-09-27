@@ -114,6 +114,15 @@ int main(int argc, char *argv[])
     printf("execution time of findName() : %lf sec\n", cpu_time2);
 
 #if defined(OPT)
+#if defined(HASH_ANALYZE)
+    /* Output the distribution of the entries in the hash table. */
+    int hashListLen[HASH_TABLE_SIZE];
+    getListLen(hashTable, hashListLen);
+    output = fopen("hash_analyze.txt", "w");
+    for (int i = 0; i < HASH_TABLE_SIZE; ++i)
+        fprintf(output, "%d %d\n", i, hashListLen[i]);
+    fclose(output);
+#endif
     clearTable(hashTable, HASH_TABLE_SIZE);
 #else
     if (pHead->pNext) free(pHead->pNext);
