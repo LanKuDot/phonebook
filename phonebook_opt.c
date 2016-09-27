@@ -5,7 +5,8 @@
 #include "phonebook_opt.h"
 
 #define HASH_MODULO(x) ((x) & 0xFFF)
-static uint32_t jenkins(char *key, size_t len);
+static uint32_t jenkins(char *key, int len);
+static uint32_t djb2(char *key, int len);
 
 static entry *findEntry(const char value[], entry * const pHead);
 /**
@@ -74,7 +75,7 @@ entry *append(char lastName[], entry **pHashTable)
 
 /* Jenkins's one-at-a-time hash function.
  */
-static uint32_t jenkins(char *key, size_t len)
+static uint32_t jenkins(char *key, int len)
 {
     uint32_t hash = 0;
     for (int i = 0; i < len; ++i) {
@@ -86,6 +87,15 @@ static uint32_t jenkins(char *key, size_t len)
     hash ^= (hash >> 11);
     hash += (hash << 15);
     return hash;
+}
+
+static uint32_t djb2(char *key, int len)
+{
+    unsigned long hash = 5381;
+    for (int i = 0; i < len; ++i)
+        hash = ((hash << 5) + hash) + key[i];
+
+    return (uint32_t)(hash & 0xFFFFFFFF);
 }
 
 static void clearList(entry *list);
