@@ -7,6 +7,7 @@
 #define HASH_MODULO(x) ((x) & 0xFFF)
 static uint32_t jenkins(char *key, int len);
 static uint32_t djb2(char *key, int len);
+static uint32_t lose_lose(char *key, int len);
 
 static entry *findEntry(const char value[], entry * const pHead);
 /**
@@ -19,7 +20,7 @@ static entry *findEntry(const char value[], entry * const pHead);
  */
 entry *findName(char lastName[], entry **pHashTable)
 {
-    uint32_t hashValue = HASH_MODULO(jenkins(lastName, strlen(lastName)));
+    uint32_t hashValue = HASH_MODULO(lose_lose(lastName, strlen(lastName)));
     return findEntry(lastName, pHashTable[hashValue]);
 }
 
@@ -59,7 +60,7 @@ entry *append(char lastName[], entry **pHashTable)
     newEntry->pNext = NULL;
 
     // Calculate the hash index
-    hashValue = HASH_MODULO(jenkins(lastName, strlen(lastName)));
+    hashValue = HASH_MODULO(lose_lose(lastName, strlen(lastName)));
     // Insert the new elemnt to the head of the linked list
     // of the specified entry.
     if (pHashTable[hashValue] == NULL)
@@ -94,6 +95,15 @@ static uint32_t djb2(char *key, int len)
     unsigned long hash = 5381;
     for (int i = 0; i < len; ++i)
         hash = ((hash << 5) + hash) + key[i];
+
+    return (uint32_t)(hash & 0xFFFFFFFF);
+}
+
+static uint32_t lose_lose(char *key, int len)
+{
+    unsigned long hash = 0;
+    for (int i = 0; i < len; ++i)
+        hash += key[i];
 
     return (uint32_t)(hash & 0xFFFFFFFF);
 }
